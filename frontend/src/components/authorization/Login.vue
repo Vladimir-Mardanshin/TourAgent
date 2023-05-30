@@ -1,6 +1,9 @@
 <template>
-  <div class="text-center mt-4" style="padding-top: 20px;">
-    <h4 class="text-center mt-2" style="font-family: Comic Sans MS, cursive;">Вход в систему</h4>
+  <div class="text-center mt-2">
+    <div>
+      <img src="/aviasales.png" alt="Example Image" style="height: 200px;">
+    </div>
+    <h4 class="text-center" style="font-family: Comic Sans MS, cursive;">Вход в систему</h4>
     <div class="d-flex justify-content-center">
       <form name="form" @submit="handleLogin" class="form-inline">
         <div class="form-group mb-3">

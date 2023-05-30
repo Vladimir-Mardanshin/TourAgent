@@ -29,7 +29,7 @@
               Билеты
             </router-link>
           </li>
-          <li v-if="currentUser" class="nav-item">
+          <li v-if="currentUser" class="">
             <router-link to="/registerAdmin" class="nav-link" v-if="currentUser.role === 'Администратор'">
               Регистрация администратора
             </router-link>

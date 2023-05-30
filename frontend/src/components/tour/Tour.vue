@@ -1,6 +1,7 @@
 <template>
   <div class="text-center mt-4" style="padding-top: 20px;">
-    <h4 class="mx-auto mt-4">Редактирование тура</h4>
+      
+    <h4 class="mx-auto">Редактирование тура</h4>
     <div v-if="tour">
       <form @submit="updateTour">
         <div class="mb-3">

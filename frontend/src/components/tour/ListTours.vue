@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <h2 style="margin-left: 15px; margin-top: 15px; font-family: Comic Sans MS, cursive;">Список туров</h2>
     <div class="centered-container">

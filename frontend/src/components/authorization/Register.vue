@@ -1,6 +1,9 @@
 <template>
-  <div class="text-center mt-4" style="padding-top: 20px;">
-    <h4 class="mx-auto mt-4">Регистрация пользователя</h4>
+  <div class="text-center mt-2">
+    <div>
+      <img src="/aviasales.png" alt="Example Image" style="height: 200px;">
+    </div>
+    <h4 class="mx-auto">Регистрация пользователя</h4>
     <form name="form" @submit="handleRegister">
       <div v-if="!successful">
         <div class="row justify-content-center">
