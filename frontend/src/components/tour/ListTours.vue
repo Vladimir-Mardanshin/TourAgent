@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <h2 style="margin-left: 15px; margin-top: 15px; font-family: Comic Sans MS, cursive;">Список туров</h2>
     <div class="centered-container">
@@ -47,13 +46,23 @@
           <p><strong>Рейтинг:</strong> {{ review.rating }}</p>
           <p><strong>Email пользователя:</strong> {{ review['sale.user.email'] }}</p>
         </div>
-        <div v-for="img in tour.tour_imgs" :key="img.id" class="mt-3">
-          <p><strong>Изображение:</strong></p>
-          <img :src="serverUrl + img.link" alt="Изображение" class="img-fluid">
-          <button @click="deleteImage(img.id)" class="btn btn-danger" style="margin-top: 20px;">
-            Удалить IMG
-          </button>
-        </div>
+
+
+        <div class="adaptivny-slayder">
+    <input type="radio" name="kadoves" :id="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index" :checked="index === currentSlide">
+    
+    <div class="kadoves">
+      <label :for="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index"></label>
+    </div>
+    
+    <div class="adaptivny-slayder-lasekun">
+      <div class="abusteku-deagulus">
+        <img :src="serverUrl + img.link" alt="Изображение" class="img-fluid" :key="index" v-for="(img, index) in tour.tour_imgs">
+      </div>
+    </div>
+  </div>
+
+
       </td>
     </tr>
   </tbody>
@@ -196,5 +205,74 @@ export default {
   justify-content: center;
 }
 
+.adaptivny-slayder {
+  position: relative;
+  max-width: 680px;
+  margin: 50px auto;
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.75);
+}
 
+.adaptivny-slayder input[name="kadoves"] {
+  display: none;
+}
+
+.kadoves {
+  position: absolute;
+  left: 0;
+  bottom: -40px;
+  text-align: center;
+  width: 100%;
+}
+
+.kadoves label {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  margin: 0 3px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, .8);
+  border-radius: 50%;
+  border: 5px solid #2f363c;
+  background-color: #738290;
+}
+
+#slaid1:checked~.kadoves label[for="slaid1"] {
+  background-color: white;
+}
+
+#slaid2:checked~.kadoves label[for="slaid2"] {
+  background-color: white;
+}
+
+#slaid3:checked~.kadoves label[for="slaid3"] {
+  background-color: white;
+}
+
+.adaptivny-slayder-lasekun {
+  overflow: hidden;
+   
+}
+
+.abusteku-deagulus {
+  display: flex;
+  width: 100%;
+  transition: all 0.5s;
+}
+
+.abusteku-deagulus img {
+  width: 100%;
+  flex-shrink:0;
+}
+
+#slaid1:checked~adaptivny-slayder-lasekun abusteku-deagulus {
+  transform: translate(0);
+}
+
+#slaid2:checked~.adaptivny-slayder-lasekun .abusteku-deagulus {
+  transform: translateX(-100%);
+}
+
+#slaid3:checked~.adaptivny-slayder-lasekun .abusteku-deagulus {
+  transform: translateX(-200%);
+}
 </style>
