@@ -19,9 +19,10 @@
         </div>
       </div>
       <div class="col-md-3">
-        <label for="departureDate">Дата вылета:</label>
-        <input class="form-control" style="margin-top: 10px;" type="date" id="departureDate" v-model="departureDate" @change="applyFilters" />
-      </div>
+  <label for="departureDate">Дата вылета:</label>
+  <input class="form-control" style="margin-top: 10px;" type="date" id="departureDate" v-model="departureDate" :min="getCurrentDate()" @change="applyFilters" />
+</div>
+
     </div>
 
     <div class="centered-container">
@@ -118,6 +119,22 @@ export default {
           console.log(error);
         });
     },
+    getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+
+    // Форматирование даты в формат, принимаемый атрибутом `min`
+    if (month < 10) {
+      month = '0' + month;
+    }
+    if (day < 10) {
+      day = '0' + day;
+    }
+
+    return `${year}-${month}-${day}`;
+  },
     checkMaxPrice() {
       if (this.maxPrice === "") {
         this.maxPrice = null;
@@ -255,7 +272,5 @@ export default {
     display: flex;
     justify-content: center;
   }
-
-
 </style>
 

@@ -34,12 +34,14 @@
             <h5 class="modal-title">Новый баланс</h5>
             <button type="button" class="btn-close" @click="closeUpdateBalanceModal"></button>
           </div>
+
           <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">Укажите сумму для ввода</label>
-              <input class="form-control" type="number" v-model="newBalance">
-            </div>
-          </div>
+  <div class="mb-3">
+    <label class="form-label">Укажите сумму для ввода</label>
+    <input class="form-control" type="text" v-model="newBalance" @input="formatInput">
+  </div>
+</div>
+
           <div class="modal-footer">
             <button class="btn btn-primary" @click="updateBalance">Подтвердить</button>
           </div>
@@ -96,13 +98,16 @@
 <button type="button" class="btn-close" @click="closeReviewModal"></button>
 </div>
 <div class="modal-body">
-<div class="mb-3">
-<label class="form-label">Рейтинг</label>
-<input class="form-control" type="number" v-model="reviewData.rating">
+
+  <div class="mb-3">
+  <label class="form-label">Рейтинг</label>
+  <input class="form-control" type="number" v-model="reviewData.rating" @input="validateRating">
 </div>
+
+
 <div class="mb-3">
 <label class="form-label">Описание</label>
-<textarea class="form-control" v-model="reviewData.description" placeholder="Мы ценим ваши эмоции, поэтому у вас не будет возможности изменить или удалить ответ:) (Первое слово дороже второго)"></textarea>
+<textarea class="form-control" style="height: 200px;" v-model="reviewData.description" placeholder="Мы ценим ваши эмоции, поэтому у вас не будет возможности изменить или удалить ответ:) (Первое слово дороже второго)"></textarea>
 </div>
 </div>
 <div class="modal-footer">
@@ -132,7 +137,7 @@ export default {
       selectedOrder: null,
       isReviewModalOpen: false,
       reviewData: {
-        rating: 0,
+        rating: 5,
         description: ''
       }
     };
@@ -163,6 +168,23 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    validateRating() {
+      if (this.reviewData.rating < 1) {
+        this.reviewData.rating = 1;
+      } else if (this.reviewData.rating > 5) {
+        this.reviewData.rating = 5;
+      }
+    },
+    formatInput() {
+      // Удаляем все, кроме цифр и точки
+      this.newBalance = this.newBalance.replace(/[^0-9.]/g, "");
+
+      // Ограничиваем количество знаков после запятой до двух
+      const parts = this.newBalance.split(".");
+      if (parts.length > 1) {
+        this.newBalance = parts[0] + "." + parts[1].slice(0, 2);
+      }
     },
     openUpdateBalanceModal() {
       this.isUpdateBalanceModalOpen = true;

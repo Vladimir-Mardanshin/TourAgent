@@ -25,7 +25,7 @@
           </div>
           <div class="mb-3">
             <label for="departure_date" class="form-label">Дата отправления</label>
-            <input type="date" id="departure_date" class="form-control text-center mx-auto" placeholder="Введите дату отправления" v-model="ticket.departure_date" required>
+            <input type="date" id="departure_date" class="form-control text-center mx-auto" :min="getCurrentDate()" placeholder="Введите дату отправления" v-model="ticket.departure_date" required>
           </div>
           <div class="mb-3">
             <label for="departure_time" class="form-label">Время отправления</label>
@@ -33,7 +33,7 @@
           </div>
           <div class="mb-3">
             <label for="arrival_date" class="form-label">Дата прибытия</label>
-            <input type="date" id="arrival_date" class="form-control text-center mx-auto" placeholder="Введите дату прибытия" v-model="ticket.arrival_date" required>
+            <input type="date" id="arrival_date" class="form-control text-center mx-auto" :min="getCurrentDate()" placeholder="Введите дату прибытия" v-model="ticket.arrival_date" required>
           </div>
           <div class="mb-3">
             <label for="arrival_time" class="form-label">Время прибытия</label>
@@ -70,6 +70,22 @@
             console.log(e);
           });
       },
+      getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+
+    // Форматирование даты в формат, принимаемый атрибутом `min`
+    if (month < 10) {
+      month = '0' + month;
+    }
+    if (day < 10) {
+      day = '0' + day;
+    }
+
+    return `${year}-${month}-${day}`;
+  },
       updateTicket(e) {
         e.preventDefault();
         var data = {

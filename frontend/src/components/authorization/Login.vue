@@ -5,15 +5,15 @@
     </div>
     <h4 class="text-center" style="font-family: Comic Sans MS, cursive;">Вход в систему</h4>
     <div class="d-flex justify-content-center">
-      <form name="form" @submit="handleLogin" class="form-inline">
-        <div class="form-group mb-3">
-          <input type="email" class="form-control text-center wide-input mt-3" name="email" placeholder="E-mail" v-model="user.email" required>
+      <form name="form" @submit.prevent="handleLogin" class="form-inline" ref="loginForm">
+        <div class="form-group mb-3" :class="{ 'move-left': submitted, 'move-right': submitted }">
+          <input type="email" class="form-control text-center wide-input mt-3" name="email" placeholder="E-mail" v-model="user.email" required :disabled="submitted">
+        </div>
+        <div class="form-group mb-3" :class="{ 'move-right': submitted, 'move-left': submitted }">
+          <input type="password" class="form-control text-center wide-input" name="password" placeholder="Пароль" v-model="user.password" required :disabled="submitted">
         </div>
         <div class="form-group mb-3">
-          <input type="password" class="form-control text-center wide-input" name="password" placeholder="Пароль" v-model="user.password" required>
-        </div>
-        <div class="form-group mb-3">
-          <button class="btn btn-primary btn-block mt-2" style="font-family: Comic Sans MS, cursive;" :disabled="loading">
+          <button class="btn btn-primary btn-block mt-2" style="font-family: Comic Sans MS, cursive;" :disabled="loading || submitted">
             <span v-show="loading" class="spinner-border spinner-border-sm"></span>
             <span>Войти</span>
           </button>
@@ -40,7 +40,8 @@ export default {
         password: "",
       },
       loading: false,
-      message: ''
+      message: '',
+      submitted: false
     };
   },
   computed: {
@@ -58,17 +59,22 @@ export default {
   },
   methods: {
     handleLogin(e) {
-      e.preventDefault();
-      this.loading = true;
-      this.$store.dispatch("auth/login", this.user)
-        .then(() => {
-          window.location.href = '/';
-        })
-        .catch(e => {
-          this.loading = false;
-          this.message = e.response.data.message;
-        });
-    }
+  e.preventDefault();
+  this.submitted = true;
+  this.loading = true;
+
+  this.$store.dispatch("auth/login", this.user)
+    .then(() => {
+      this.loading = false;
+      window.location.href = '/';
+    })
+    .catch(e => {
+      this.loading = false;
+      this.message = e.response.data.message;
+      this.submitted = false;
+    });
+}
+
   }
 };
 </script>
@@ -76,6 +82,36 @@ export default {
 <style>
 .wide-input {
   width: 100%;
+}
+
+.move-left {
+  animation: move-left-animation 0.5s ease;
+}
+
+.move-right {
+  animation: move-right-animation 0.5s ease;
+}
+
+@keyframes move-left-animation {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes move-right-animation {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 </style>
 

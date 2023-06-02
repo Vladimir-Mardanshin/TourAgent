@@ -87,13 +87,13 @@ export default {
   },
   methods: {
     openReviewsWindow(reviews) {
-  const reviewsWindow = window.open('', '_blank', 'width=400,height=400');
+  const reviewsWindow = window.open('', '_blank', 'width=400,height=500');
   const reviewsContent = reviews.map((review) => {
     return `
-      <p><strong>Время:</strong> ${this.formatDate(review.date)}</p>
-      <p><strong>Отзыв:</strong> ${review.description}</p>
-      <p><strong>Рейтинг:</strong> ${review.rating}</p>
-      <p><strong>Email пользователя:</strong> ${review['sale.user.email']}</p>
+      <p>${this.formatDate(review.date)}</p>
+      <p>${review.description}</p>
+      <p><strong>Ставлю:</strong> ${review.rating}<strong>!</strong></p>
+      <p><strong>Пользователь:</strong> ${review['sale.user.email']}</p>
       <hr>
     `;
   }).join('');
@@ -105,11 +105,26 @@ export default {
     <style>
       body {
         text-align: center;
+        font-family: "Comic Sans MS", cursive;
+      }
+      h1 {
+        font-family: "Comic Sans MS", cursive;
+        color: white;
+        background-color: blue;
+        padding-bottom: 10px;
+      }
+      .after {
+        background-color: blue;
+        width: 375px;
+        height: 35px;
+        margin-bottom: 35px;
       }
     </style>
   </head>
   <body>
+    <div class="after">
     <h1>Отзывы</h1>
+    </div>
     <div>
       ${reviewsContent}
     </div>
