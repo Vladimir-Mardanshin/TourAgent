@@ -2,72 +2,64 @@
   <div>
     <h2 style="margin-left: 15px; margin-top: 15px; font-family: Comic Sans MS, cursive;">Список туров</h2>
     <div class="centered-container">
-    <table class="table" style="width: 93%; margin-top: 15px;">
-  <thead>
-    <tr>
-      <th>Название</th>
-      <th>Описание</th>
-      <th>Стоимость</th>
-      <th>Дата начала</th>
-      <th>Дата окончания</th>
-      <th v-if="!isAdmin">Действия</th>
-      <th colspan="5">Отзывы и изображения</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="(tour, index) in filteredTours" :key="index">
-      <template v-if="isAdmin">
-        <td>
-          <router-link :to="{ name: 'tour-details', params: { id: tour.id }}">
-            {{ tour.name }}
-          </router-link>
-        </td>
-        <td>{{ tour.description }}</td>
-        <td>{{ tour.cost }} руб.</td>
-        <td>{{ formatDate(tour.start_date) }}</td>
-        <td>{{ formatDate(tour.end_date) }}</td>
-      </template>
-      <template v-else>
-        <td>{{ tour.name }}</td>
-        <td>{{ tour.description }}</td>
-        <td>{{ tour.cost }} руб.</td>
-        <td>{{ formatDate(tour.start_date) }}</td>
-        <td>{{ formatDate(tour.end_date) }}</td>
-      </template>
-      <td v-if="!isAdmin">
-        <button @click="buyTour(tour)" class="btn btn-primary">
-          Купить
-        </button>
-      </td>
-      <td colspan="5">
-        <div v-for="review in tour.reviews" :key="review.id" class="mt-3">
-          <p><strong>Время:</strong> {{ formatDate(review.date) }}</p>
-          <p><strong>Отзыв:</strong> {{ review.description }}</p>
-          <p><strong>Рейтинг:</strong> {{ review.rating }}</p>
-          <p><strong>Email пользователя:</strong> {{ review['sale.user.email'] }}</p>
-        </div>
+      <table class="table" style="width: 93%; margin-top: 15px;">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Стоимость</th>
+            <th>Дата начала</th>
+            <th>Дата окончания</th>
+            <th v-if="!isAdmin">Действия</th>
+            <th colspan="5">Отзывы и изображения</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tour, index) in filteredTours" :key="index">
+            <template v-if="isAdmin">
+              <td>
+                <router-link :to="{ name: 'tour-details', params: { id: tour.id }}">
+                  {{ tour.name }}
+                </router-link>
+              </td>
+              <td>{{ tour.description }}</td>
+              <td>{{ tour.cost }} руб.</td>
+              <td>{{ formatDate(tour.start_date) }}</td>
+              <td>{{ formatDate(tour.end_date) }}</td>
+            </template>
+            <template v-else>
+              <td>{{ tour.name }}</td>
+              <td>{{ tour.description }}</td>
+              <td>{{ tour.cost }} руб.</td>
+              <td>{{ formatDate(tour.start_date) }}</td>
+              <td>{{ formatDate(tour.end_date) }}</td>
+            </template>
+            <td v-if="!isAdmin">
+              <button @click="buyTour(tour)" class="btn btn-primary">
+                Купить
+              </button>
+            </td>
+            <td colspan="5">
 
-
-        <div class="adaptivny-slayder">
-    <input type="radio" name="kadoves" :id="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index" :checked="index === currentSlide">
-    
-    <div class="kadoves">
-      <label :for="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index"></label>
+              <div class="adaptivny-slayder" >
+                <input type="radio" name="kadoves" :id="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index" :checked="index === currentSlide">
+                <div class="kadoves">
+                  <label :for="'slaid' + (index + 1)" v-for="(img, index) in tour.tour_imgs" :key="index"></label>
+                </div>
+                <div class="adaptivny-slayder-lasekun" style="margin-bottom: 0;">
+                  <div class="abusteku-deagulus" style="margin-bottom: 0;">
+                    <img :src="serverUrl + img.link" alt="Изображение" class="img-fluid" :key="index" v-for="(img, index) in tour.tour_imgs">
+                  </div>
+                </div>
+              </div>
+              <button @click="openReviewsWindow(tour.reviews)" class="btn btn-primary" style="margin-bottom: 5px; margin-top: 30px;">
+                Просмотр отзывов
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
-    <div class="adaptivny-slayder-lasekun">
-      <div class="abusteku-deagulus">
-        <img :src="serverUrl + img.link" alt="Изображение" class="img-fluid" :key="index" v-for="(img, index) in tour.tour_imgs">
-      </div>
-    </div>
-  </div>
-
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-</div>
 
     <router-link v-if="isAdmin" to="/addTour" style="margin-left: 30px; margin-bottom: 10px; margin-top: 10px; font-family: Comic Sans MS, cursive;" class="btn btn-primary">
       Добавить тур
@@ -94,6 +86,39 @@ export default {
     };
   },
   methods: {
+    openReviewsWindow(reviews) {
+  const reviewsWindow = window.open('', '_blank', 'width=400,height=400');
+  const reviewsContent = reviews.map((review) => {
+    return `
+      <p><strong>Время:</strong> ${this.formatDate(review.date)}</p>
+      <p><strong>Отзыв:</strong> ${review.description}</p>
+      <p><strong>Рейтинг:</strong> ${review.rating}</p>
+      <p><strong>Email пользователя:</strong> ${review['sale.user.email']}</p>
+      <hr>
+    `;
+  }).join('');
+
+  reviewsWindow.document.write(`
+  <html>
+  <head>
+    <title>Отзывы</title>
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Отзывы</h1>
+    <div>
+      ${reviewsContent}
+    </div>
+  </body>
+</html>
+  `);
+  reviewsWindow.document.close();
+},
+
     fetchTours() {
       http.get('/listTours')
         .then((response) => {
@@ -170,6 +195,14 @@ export default {
     formatDate(date) {
       return dayjs(date).format('DD.MM.YYYY HH:mm');
     },
+    goToPrevSlide() {
+      const totalSlides = this.tour.tour_imgs.length;
+      this.currentSlide = (this.currentSlide - 1 + totalSlides) % totalSlides;
+    },
+    goToNextSlide() {
+      const totalSlides = this.tour.tour_imgs.length;
+      this.currentSlide = (this.currentSlide + 1) % totalSlides;
+    },
   },
   computed: {
     currentUser() {
@@ -208,7 +241,7 @@ export default {
 .adaptivny-slayder {
   position: relative;
   max-width: 680px;
-  margin: 50px auto;
+  margin: 5px auto;
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.75);
 }
 
@@ -219,7 +252,7 @@ export default {
 .kadoves {
   position: absolute;
   left: 0;
-  bottom: -40px;
+  bottom: -30px;
   text-align: center;
   width: 100%;
 }
@@ -250,7 +283,6 @@ export default {
 
 .adaptivny-slayder-lasekun {
   overflow: hidden;
-   
 }
 
 .abusteku-deagulus {
@@ -264,8 +296,8 @@ export default {
   flex-shrink:0;
 }
 
-#slaid1:checked~adaptivny-slayder-lasekun abusteku-deagulus {
-  transform: translate(0);
+#slaid1:checked~.adaptivny-slayder-lasekun .abusteku-deagulus {
+  transform: translateX(0%);
 }
 
 #slaid2:checked~.adaptivny-slayder-lasekun .abusteku-deagulus {
@@ -275,4 +307,18 @@ export default {
 #slaid3:checked~.adaptivny-slayder-lasekun .abusteku-deagulus {
   transform: translateX(-200%);
 }
+
+
+.alert-danger {
+  color: red;
+}
+
+.alert-success {
+  color: green;
+}
+
+.btn {
+  margin-right: 5px;
+}
+
 </style>
